@@ -1,6 +1,8 @@
 import streamlit
-import pandas
-
+#import pandas
+import requests
+import snowflake.connector
+from urllib.error import URLError
 
 streamlit.title('my parents new healthy diner')
 
@@ -17,7 +19,7 @@ fruits_selected =streamlit.multiselect("Pick some fruits:", list(my_fruit_list.i
 fruits_to_show = my_fruit_list.loc[fruits_selected]
 streamlit.dataframe(fruits_to_show)
 
-import requests
+
 streamlit.header("Fruityvice Fruit Advice!")
 fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
 streamlit.write('The user entered ', fruit_choice)
@@ -28,7 +30,9 @@ fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
 # output in the form of table
 streamlit.dataframe(fruityvice_normalized)
 
-import snowflake.connector
+streamlit.stop()
+
+
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
 my_cur.execute("SELECT * from fruit_load_list")
